@@ -3,27 +3,25 @@
  */
 package com.tuyo.cards.controller;
 
-import java.util.List;
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.*;
+import com.tuyo.cards.config.*;
+import com.tuyo.cards.model.Properties;
+import com.tuyo.cards.model.*;
+import com.tuyo.cards.repository.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.tuyo.cards.model.Cards;
-import com.tuyo.cards.model.Customer;
-import com.tuyo.cards.repository.CardsRepository;
-
-/**
- * @author Eazy Bytes
- *
- */
+import java.util.*;
 
 @RestController
 public class CardsController {
 
 	@Autowired
 	private CardsRepository cardsRepository;
+
+	@Autowired
+	CardsServiceConfig cardsConfig;
 
 	@PostMapping("/myCards")
 	public List<Cards> getCardDetails(@RequestBody Customer customer) {
@@ -34,6 +32,15 @@ public class CardsController {
 			return null;
 		}
 
+	}
+
+	@GetMapping("/cards/properties")
+	public String getPropertyDetails() throws JsonProcessingException {
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		Properties properties = new Properties(cardsConfig.getMsg(), cardsConfig.getBuildVersion(),
+				cardsConfig.getMailDetails(), cardsConfig.getActiveBranches());
+		String jsonStr = ow.writeValueAsString(properties);
+		return jsonStr;
 	}
 
 }
