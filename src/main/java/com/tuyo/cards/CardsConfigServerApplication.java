@@ -3,10 +3,12 @@ package com.tuyo.cards;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.autoconfigure.domain.*;
+import org.springframework.cloud.context.config.annotation.*;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.*;
 
 @SpringBootApplication
+@RefreshScope
 @ComponentScans({ @ComponentScan("com.tuyo.cards.controller") })
 @EnableJpaRepositories("com.tuyo.cards.repository")
 @EntityScan("com.tuyo.cards.model")
